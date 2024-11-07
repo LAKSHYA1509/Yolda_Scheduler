@@ -1,2 +1,2 @@
-# Yolda_Scheduler
- PostgresSQL based full stack calender management based application built on scalable framework of Spring Boot
+# Yolda-Mini_Project_Scheduler
+Next.js application implemented with PostgreSQL database to effectively manage data
