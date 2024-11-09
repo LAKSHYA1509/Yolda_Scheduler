@@ -1,2 +1,2 @@
-# Yolda_Scheduler
-Full Stack Web Application based on Spring boot and PostgreSQL that is designed to schedule all your events in one place
+# Yolda-Mini_Project_Scheduler
+Next.js application implemented with PostgreSQL database to effectively manage data
