@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" 
+th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
+>
+<head>
+    <title>Add Contact</title>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet" />
+    <style>
+        #external-events {
+            width: 150px;
+            padding: 0 10px;
+            border: 1px solid #ccc;
+            background: #eee;
+            text-align: left;
+        }
+
+        #external-events h4 {
+            font-size: 16px;
+            margin-top: 0;
+            padding-top: 1em;
+        }
+
+        #external-events .fc-event {
+            margin: 3px 0;
+            cursor: move;
+        }
+
+        #calendar-wrap {
+            margin-left: 200px;
+        }
+
+        #calendar {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <!-- Sidebar -->
+        <div th:if="${loggedInUser }">
+            <div class="relative flex flex-col min-w-0 p-3 mt-24 break-words bg-white shadow-xl rounded-2xl bg-clip-border" style="margin-top: 100px;">
+                
+                <!-- External Events -->
+                <!-- <div id='external-events'>
+                    <p>
+                        <strong>Draggable Events</strong>
+                    </p>
+                    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
+                        <div class='fc-event-main'>My Event 1</div>
+                    </div>
+                    <div class='fc-event fc-h-event fc-daygrid-event fc-daygrid-block-event'>
+                        <div class='fc-event-main'>My Event 2</div>
+                    </div>
+                    <p>
+                        <input type='checkbox' id='drop-remove' />
+                        <label for='drop-remove'>remove after drop</label>
+                    </p>
+                </div> -->
+
+                <!-- Calendar -->
+                <div data-th-replace="message::messagebox"></div>
+                <div class="relative flex flex-col min-w-0 p-3 mt-16 break-words bg-white shadow-xl rounded-2xl bg-clip-border">
+                    <div id="calendar"></div>
+                </div>
+
+                <!-- Add Event Button -->
+                <div class="text-center mt-4">
+                    <button id="addEventBtn" class="px-3 py-2 dark:bg-blue-600 hover:dark:bg-blue-700 rounded bg-black text-white">Add New Event</button>
+                </div>
+                <!-- Event Form Modal -->
+                <div id="eventFormModal" style="display: none; background: rgba(0, 0, 0, 0.5); position: fixed; top: 0; left: 0; width: 100%; height: 100%; align-items: center; justify-content: center; z-index: 9999;">
+                    <div style="background: white; max-width: 400px; padding: 20px; border-radius: 10px; margin: 0 auto; position: relative; z-index: 10000;">
+                        <h2>Add Event</h2>
+                        <form
+                        action=""
+                        class="mt-8"
+                        data-th-action="@{'/user/contacts/add'}"
+                        data-th-object="${contactForm}"
+                        method="post"
+                        enctype="multipart/form-data"
+                        style="display: block; max-width: 600px; width: 367px;"
+                      >                            <div class="mb-5">
+                                <label for="event-title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Title</label>
+                                <input id="event-title" value="name" type="text"  data-th-field="*{name}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Enter event title" required />
+                            </div>
+                            <p
+                    class="text-red-500"
+                    data-th-if="${#fields.hasErrors('name')}"
+                    data-th-errors="*{name}"
+                  >
+                    Invalid Name
+                  </p>
+                            <div class="mb-5">
+                                <label for="event-description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Description</label>
+                                <textarea id="event-description" value="exaple@gmail.com"  data-th-field="*{email}" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" placeholder="Enter event description" required></textarea>
+                            </div>
+                            <p
+                    class="text-red-500"
+                    data-th-if="${#fields.hasErrors('email')}"
+                    data-th-errors="*{email}"
+                  >
+                    Invalid Name
+                  </p>
+                            <div class="mb-5">
+                                <label for="event-date" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Date</label>
+                                <input type="date" value="9999999999"  data-th-field="*{phoneNumber}" id="event-date" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
+                            </div>
+                            <p
+                    class="text-red-500"
+                    data-th-if="${#fields.hasErrors('phoneNumber')}"
+                    data-th-errors="*{phoneNumber}"
+                  >
+                    Invalid Name
+                  </p>
+                            <div class="mb-5">
+                                <label for="event-time" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Event Time</label>
+                                <input type="time" value="8:54" data-th-field="*{address}" id="event-time" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light" required />
+                            </div>
+                            <p
+                    class="text-red-500"
+                    data-th-if="${#fields.hasErrors('address')}"
+                    data-th-errors="*{address}"
+                  >
+                    Invalid Name
+                  </p>
+                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Create Event</button>
+                            <button type="button" onclick="closeEventForm()" class="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-gray-600 dark:hover:bg-gray-700 dark:focus:ring-gray-800">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Initialize calendar
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        dateClick: function(info) {
+            openEventForm(info.dateStr); // Open event form on date click
+        }
+    });
+
+    calendar.render(); // Render the calendar
+
+    // Add event button handler
+    document.getElementById('addEventBtn').addEventListener('click', function() {
+        openEventForm(); // Open event form on button click
+    });
+
+    // Event form submission handler
+    document.getElementById('eventForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent default form submission
+        addTemporaryEvent(calendar); // Add temporary event to calendar
+    });
+});
+
+function openEventForm(date) {
+    document.getElementById('eventFormModal').style.display = 'flex';
+    if (date) {
+        document.getElementById('event-date').value = date; // Pre-fill date if provided
+    }
+}
+
+function closeEventForm() {
+    document.getElementById('eventFormModal').style.display = 'none';
+}
+
+function addTemporaryEvent(calendar) {
+    // Get event details from form
+    var title = document.getElementById('event-title').value;
+    var date = document.getElementById('event-date').value;
+    var time = document.getElementById('event-time').value;
+    var description = document.getElementById('event-description').value;
+
+    // Combine date and time into a datetime string
+    var startDateTime = `${date}T${time}`;
+
+    // Add the event to the calendar (temporary, will disappear on reload)
+    calendar.addEvent({
+        title: title,
+        start: startDateTime,
+        description: description,
+        allDay: false
+    });
+
+    // Close form and reset fields
+    closeEventForm();
+    document.getElementById('eventForm').reset();
+}
+
+    </script>
+</body>
+</html>

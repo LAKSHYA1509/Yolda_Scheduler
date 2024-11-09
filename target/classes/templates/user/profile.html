@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}"
+>
+  <head>
+    <title data-th-text="${loggedInUser.name}+' |  Yolda'">Profile Page</title>
+  </head>
+  <body class="bg-gray-100 font-sans">
+    <div id="content">
+      <!-- Sidebar -->
+      <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar :: sidebar}"></div>
+      </div>
+
+      <div class="sm:pl-64 pt-20 min-h-screen flex items-center justify-center">
+        <!-- Profile Card Container -->
+        <div class="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full text-center">
+          <h1 class="text-4xl font-semibold text-blue-600 mb-6">
+            Welcome to Yolda, <span data-th-text="${loggedInUser.name}"></span>!
+          </h1>
+          <p class="text-gray-700 text-lg leading-relaxed mb-6">
+            To get started here, follow these pretty easy steps:
+          </p>
+
+          <!-- Steps List -->
+          <div class="text-left text-gray-600">
+            <ul class="list-disc list-inside space-y-4">
+              <li>
+                <span class="font-medium text-blue-500">Go to Add Events:</span> Add new events and check your daily calendar.
+              </li>
+              <li>
+                <span class="font-medium text-blue-500">View Events:</span> Check out all your events in the Events section.
+              </li>
+              <li>
+                <span class="font-medium text-blue-500">Exciting Features:</span> Stay tuned for more updates and features!
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      console.log("this is profile page");
+    </script>
+  </body>
+</html>
