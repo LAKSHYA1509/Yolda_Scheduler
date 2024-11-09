@@ -63,7 +63,7 @@ The application will be available at `http://localhost:8080`.
 Feel free to fork the repository, make changes, and submit a pull request. We welcome contributions!
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU 3.0 License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 - **Spring Boot** for the back-end framework.
